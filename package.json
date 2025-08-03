@@ -1,0 +1,56 @@
+{
+  "name": "quest-forge-mini-app",
+  "version": "1.0.0",
+  "description": "Telegram Mini App for Quest Forge",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve --mode=development",
+    "build": "webpack --mode=production",
+    "analyze": "webpack --mode=production --analyze",
+    "test:eslint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "test:stylelint": "stylelint src/**/*.css",
+    "tsc": "tsc --noEmit",
+    "prettier": "prettier --check src/**/*.{ts,tsx,js,jsx,css,json}",
+    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
+    "prettier:fix": "prettier --write src/**/*.{ts,tsx,js,jsx,css,json}"
+  },
+  "dependencies": {
+    "@twa-dev/sdk": "^7.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@tonconnect/sdk": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@svgr/webpack": "^8.0.0",
+    "css-loader": "^6.8.0",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.7.0",
+    "prettier": "^3.0.0",
+    "style-loader": "^3.3.0",
+    "stylelint": "^15.10.0",
+    "stylelint-config-standard": "^34.0.0",
+    "ts-loader": "^9.4.0",
+    "typescript": "^5.1.0",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.0",
+    "webpack-dev-server": "^4.15.0",
+    "webpack-bundle-analyzer": "^4.8.0"
+  },
+  "keywords": [
+    "telegram",
+    "mini-app",
+    "quest",
+    "game",
+    "ton"
+  ],
+  "author": "Quest Forge Team",
+  "license": "MIT"
+}

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quest Forge - Telegram Mini App</title>
+    
+    <!-- Критические заголовки для кэширования -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Стили -->
+    <link rel="stylesheet" href="/src/styles.css">
+    
+    <!-- Предзагрузка критических ресурсов -->
+    <link rel="preload" href="/src/styles.css" as="style">
+</head>
+<body>
+    <!-- Загрузочный экран -->
+    <div id="loading" class="section">
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <h2>Quest Forge</h2>
+            <p>Загрузка приложения...</p>
+        </div>
+    </div>
+
+    <!-- Главное меню -->
+    <div id="main-menu" class="section" style="display: none;">
+        <div class="header">
+            <h1>🎮 Quest Forge</h1>
+            <div class="user-info">
+                <div class="balance">
+                    <span class="balance-label">Баланс:</span>
+                    <span class="balance-amount">0</span> QUC
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-grid">
+            <button id="quests-btn" class="menu-item">
+                <div class="menu-icon">🗺️</div>
+                <div class="menu-text">
+                    <h3>Квесты</h3>
+                    <p>Исследуйте мир приключений</p>
+                </div>
+            </button>
+            
+            <button id="wallet-btn" class="menu-item">
+                <div class="menu-icon">💎</div>
+                <div class="menu-text">
+                    <h3>Кошелек</h3>
+                    <p>Управляйте своими активами</p>
+                </div>
+            </button>
+            
+            <button id="shop-btn" class="menu-item">
+                <div class="menu-icon">🛒</div>
+                <div class="menu-text">
+                    <h3>Магазин</h3>
+                    <p>Покупайте подсказки и бустеры</p>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Список квестов -->
+    <div id="quests-list" class="section" style="display: none;">
+        <div class="header">
+            <h2>🗺️ Доступные квесты</h2>
+            <button id="back-to-quests" class="back-btn">← Назад</button>
+        </div>
+        
+        <div id="quests-container" class="quests-container">
+            <!-- Квесты будут загружены динамически -->
+        </div>
+    </div>
+
+    <!-- Детали квеста -->
+    <div id="quest-details" class="section" style="display: none;">
+        <div class="header">
+            <h2 id="quest-title">Название квеста</h2>
+            <button id="back-to-quests" class="back-btn">← Назад</button>
+        </div>
+        
+        <div class="quest-details">
+            <div class="quest-info">
+                <p id="quest-description">Описание квеста</p>
+                <div class="quest-meta">
+                    <span class="difficulty" id="quest-difficulty">Сложность</span>
+                    <span class="reward" id="quest-reward">Награда</span>
+                </div>
+                <div class="quest-progress">
+                    <span id="quest-progress">Прогресс</span>
+                </div>
+            </div>
+            
+            <button id="play-quest-btn" class="play-btn">🎮 Начать квест</button>
+        </div>
+    </div>
+
+    <!-- Игра в квест -->
+    <div id="quest-playing" class="section" style="display: none;">
+        <div class="header">
+            <h2>🎮 Игра в квест</h2>
+            <button id="back-to-quests" class="back-btn">← Назад</button>
+        </div>
+        
+        <div class="quest-game">
+            <div id="quest-stage" class="quest-stage">
+                <h3 id="stage-title">Этап квеста</h3>
+                <p id="stage-description">Описание этапа</p>
+                <div id="stage-hint" class="stage-hint" style="display: none;">
+                    <p>💡 Подсказка: <span id="hint-text"></span></p>
+                </div>
+            </div>
+            
+            <div class="answer-section">
+                <input type="text" id="answer-input" placeholder="Введите ваш ответ..." class="answer-input">
+                <button id="submit-answer" class="submit-btn">Отправить ответ</button>
+            </div>
+            
+            <div class="quest-controls">
+                <button id="use-hint" class="hint-btn">💡 Использовать подсказку</button>
+                <button id="skip-stage" class="skip-btn">⏭️ Пропустить этап</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кошелек -->
+    <div id="wallet" class="section" style="display: none;">
+        <div class="header">
+            <h2>💎 Кошелек</h2>
+            <button id="main-menu-btn" class="back-btn">← Главное меню</button>
+        </div>
+        
+        <div class="wallet-content">
+            <div class="balance-card">
+                <h3>Ваш баланс</h3>
+                <div class="balance-display">
+                    <div class="balance-item">
+                        <span class="balance-label">QUC:</span>
+                        <span class="balance-amount">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wallet-actions">
+                <button id="connect-wallet-btn" class="action-btn">🔗 Подключить TON кошелек</button>
+                <button id="withdraw-btn" class="action-btn">💸 Вывести QUC</button>
+            </div>
+            
+            <div class="wallet-info">
+                <p>💡 Подключите TON кошелек для вывода средств</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Магазин -->
+    <div id="shop" class="section" style="display: none;">
+        <div class="header">
+            <h2>🛒 Магазин</h2>
+            <button id="main-menu-btn" class="back-btn">← Главное меню</button>
+        </div>
+        
+        <div class="shop-content">
+            <div class="balance-display">
+                <span class="balance-label">Ваш баланс:</span>
+                <span class="balance-amount">0</span> QUC
+            </div>
+            
+            <div class="shop-items">
+                <div class="shop-item">
+                    <div class="item-icon">💡</div>
+                    <div class="item-info">
+                        <h3>Подсказка</h3>
+                        <p>Получите подсказку для текущего этапа</p>
+                        <span class="item-price">5 QUC</span>
+                    </div>
+                    <button id="buy-hint-btn" class="buy-btn">Купить</button>
+                </div>
+                
+                <div class="shop-item">
+                    <div class="item-icon">⚡</div>
+                    <div class="item-info">
+                        <h3>Бустер</h3>
+                        <p>Пропустите сложный этап</p>
+                        <span class="item-price">10 QUC</span>
+                    </div>
+                    <button id="buy-booster-btn" class="buy-btn">Купить</button>
+                </div>
+                
+                <div class="shop-item">
+                    <div class="item-icon">🎨</div>
+                    <div class="item-info">
+                        <h3>NFT Достижение</h3>
+                        <p>Создайте уникальное NFT</p>
+                        <span class="item-price">50 QUC</span>
+                    </div>
+                    <button id="buy-nft-btn" class="buy-btn">Купить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипты -->
+    <script type="module" src="/src/app.js"></script>
+</body>
+</html> 

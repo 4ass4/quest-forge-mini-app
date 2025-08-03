@@ -1,29 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import WebApp from '@twa-dev/sdk';
-import { useTelegram } from './hooks/useTelegram';
-import { useQuestEngine } from './hooks/useQuestEngine';
-import { useTONConnect } from './hooks/useTONConnect';
-import { MainMenu } from './components/MainMenu';
-import { QuestList } from './components/QuestList';
-import { QuestPlaying } from './components/QuestPlaying';
-import { Wallet } from './components/Wallet';
-import { Shop } from './components/Shop';
-import { LoadingScreen } from './components/LoadingScreen';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { AppState, Screen } from './types';
+import './styles.css';
 
 const App: React.FC = () => {
-  const [appState, setAppState] = useState<AppState>({
-    currentScreen: Screen.LOADING,
-    user: null,
-    balance: 0,
-    isLoading: true,
-    error: null,
-  });
-
-  const telegram = useTelegram();
-  const questEngine = useQuestEngine();
-  const tonConnect = useTONConnect();
+  const [isLoading, setIsLoading] = useState(true);
+  const [balance, setBalance] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -37,29 +19,15 @@ const App: React.FC = () => {
         
         if (user) {
           // Загружаем баланс пользователя
-          const balance = await loadUserBalance(user.id);
-          
-          setAppState(prev => ({
-            ...prev,
-            user,
-            balance,
-            currentScreen: Screen.MAIN_MENU,
-            isLoading: false,
-          }));
-        } else {
-          setAppState(prev => ({
-            ...prev,
-            currentScreen: Screen.MAIN_MENU,
-            isLoading: false,
-          }));
+          const userBalance = await loadUserBalance(user.id);
+          setBalance(userBalance);
         }
+        
+        setIsLoading(false);
       } catch (error) {
         console.error('Ошибка инициализации:', error);
-        setAppState(prev => ({
-          ...prev,
-          error: 'Ошибка инициализации приложения',
-          isLoading: false,
-        }));
+        setError('Ошибка инициализации приложения');
+        setIsLoading(false);
       }
     };
 
@@ -69,11 +37,14 @@ const App: React.FC = () => {
   const loadUserBalance = async (userId: number): Promise<number> => {
     try {
       const response = await fetch('http://localhost:3001/api/user-balance', {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Telegram-Init-Data': WebApp.initData || '',
         },
+        body: JSON.stringify({
+          userId: userId,
+          chatId: userId
+        }),
       });
 
       if (response.ok) {
@@ -86,30 +57,38 @@ const App: React.FC = () => {
     return 0;
   };
 
-  const handleScreenChange = (screen: Screen) => {
-    setAppState(prev => ({
-      ...prev,
-      currentScreen: screen,
-    }));
+  const handleGetBalance = async () => {
+    try {
+      const user = WebApp.initDataUnsafe?.user;
+      if (user) {
+        const newBalance = await loadUserBalance(user.id);
+        setBalance(newBalance);
+        WebApp.showAlert(`Ваш баланс: ${newBalance} QUC`);
+      }
+    } catch (error) {
+      console.error('Ошибка получения баланса:', error);
+      WebApp.showAlert('Ошибка получения баланса');
+    }
   };
 
-  const handleError = (error: string) => {
-    setAppState(prev => ({
-      ...prev,
-      error,
-    }));
-    WebApp.showAlert(error);
+  const handleStartQuest = () => {
+    WebApp.showAlert('Функция запуска квеста в разработке');
   };
 
-  if (appState.isLoading) {
-    return <LoadingScreen />;
+  if (isLoading) {
+    return (
+      <div className="loading-screen">
+        <h2>Quest Forge</h2>
+        <p>Загрузка приложения...</p>
+      </div>
+    );
   }
 
-  if (appState.error) {
+  if (error) {
     return (
       <div className="error-screen">
         <h2>Ошибка</h2>
-        <p>{appState.error}</p>
+        <p>{error}</p>
         <button onClick={() => window.location.reload()}>
           Перезагрузить
         </button>
@@ -118,48 +97,22 @@ const App: React.FC = () => {
   }
 
   return (
-    <ErrorBoundary onError={handleError}>
-      <div className="app">
-        {appState.currentScreen === Screen.MAIN_MENU && (
-          <MainMenu
-            user={appState.user}
-            balance={appState.balance}
-            onScreenChange={handleScreenChange}
-          />
-        )}
-        
-        {appState.currentScreen === Screen.QUEST_LIST && (
-          <QuestList
-            onScreenChange={handleScreenChange}
-            questEngine={questEngine}
-          />
-        )}
-        
-        {appState.currentScreen === Screen.QUEST_PLAYING && (
-          <QuestPlaying
-            onScreenChange={handleScreenChange}
-            questEngine={questEngine}
-          />
-        )}
-        
-        {appState.currentScreen === Screen.WALLET && (
-          <Wallet
-            user={appState.user}
-            balance={appState.balance}
-            onScreenChange={handleScreenChange}
-            tonConnect={tonConnect}
-          />
-        )}
-        
-        {appState.currentScreen === Screen.SHOP && (
-          <Shop
-            user={appState.user}
-            balance={appState.balance}
-            onScreenChange={handleScreenChange}
-          />
-        )}
+    <div className="app">
+      <div className="header">
+        <h1>Quest Forge</h1>
+        <p>Ваш баланс: {balance} QUC</p>
       </div>
-    </ErrorBoundary>
+      
+      <div className="main-content">
+        <button className="action-button" onClick={handleGetBalance}>
+          Получить баланс
+        </button>
+        
+        <button className="action-button" onClick={handleStartQuest}>
+          Начать квест
+        </button>
+      </div>
+    </div>
   );
 };
 

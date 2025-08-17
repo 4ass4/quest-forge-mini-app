@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { I18nextProvider } from 'react-i18next';
@@ -13,7 +13,8 @@ import Shop from './pages/Shop';
 
 // Компоненты
 import Navigation from './components/common/Navigation';
-import LoadingScreen from './components/common/LoadingScreen';
+import SplashScreen from './components/common/SplashScreen';
+// import LoadingScreen from './components/common/LoadingScreen'; // Не используется в текущей версии
 import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Hooks
@@ -23,6 +24,16 @@ const manifestUrl = 'https://your-domain.com/tonconnect-manifest.json';
 
 function AppContent() {
   const { tg, isReady } = useTelegram();
+  const [showSplash, setShowSplash] = useState(true);
+  
+  // Добавляем отладочную информацию
+  console.log('App: Компонент загружен');
+  console.log('App: Telegram WebApp ready:', isReady);
+  console.log('App: Telegram object:', tg);
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+  };
 
   useEffect(() => {
     // Применяем цветовую схему Telegram
@@ -41,8 +52,9 @@ function AppContent() {
     }
   }, [tg]);
 
-  if (!isReady) {
-    return <LoadingScreen />;
+  // Показываем SplashScreen при первом запуске
+  if (showSplash) {
+    return <SplashScreen onFinish={handleSplashFinish} />;
   }
 
   return (

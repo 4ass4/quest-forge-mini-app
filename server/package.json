@@ -1,32 +1,29 @@
 {
-  "name": "quest-forge-bot-server",
+  "name": "quest-forge-bot",
   "version": "1.0.0",
-  "description": "Telegram Bot Server for Quest Forge Mini App",
-  "main": "bot.js",
+  "description": "Telegram Bot for Quest Forge Mini App",
+  "main": "simple-bot.js",
   "scripts": {
-    "start": "node bot.js",
-    "dev": "nodemon bot.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node simple-bot.js",
+    "start-full": "node bot.js",
+    "dev": "nodemon simple-bot.js",
+    "dev-full": "nodemon bot.js"
   },
-  "keywords": [
-    "telegram",
-    "bot",
-    "mini-app",
-    "quest",
-    "game"
-  ],
-  "author": "Quest Forge Team",
-  "license": "MIT",
   "dependencies": {
-    "cors": "^2.8.5",
+    "node-telegram-bot-api": "^0.64.0",
     "dotenv": "^16.3.1",
-    "express": "^4.21.2",
-    "node-telegram-bot-api": "^0.64.0"
+    "@supabase/supabase-js": "^2.38.4"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
   },
-  "engines": {
-    "node": ">=16.0.0"
-  }
+  "keywords": [
+    "telegram",
+    "bot",
+    "quest",
+    "game",
+    "supabase"
+  ],
+  "author": "Quest Forge Team",
+  "license": "MIT"
 }

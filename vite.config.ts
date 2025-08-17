@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  base: '/quest-forge-mini-app/', // Важно для GitHub Pages
   plugins: [
     react(),
     VitePWA({
@@ -17,8 +18,8 @@ export default defineConfig({
         theme_color: '#3b82f6',
         background_color: '#17212b',
         display: 'standalone',
-        scope: '/',
-        start_url: '/',
+        scope: '/quest-forge-mini-app/',
+        start_url: '/quest-forge-mini-app/',
         icons: [
           {
             src: 'icons/icon-192x192.png',

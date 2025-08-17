@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Play, Star, Users, Clock, Zap } from 'lucide-react';
 import { useTelegram } from '../hooks/useTelegram';
-import { questApi } from '../services/api';
+import { STATIC_QUESTS } from '../data/staticData';
 
 // Остальной код остается тот же, но убираем неиспользуемый импорт useTranslation
 
@@ -26,53 +26,15 @@ const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        // Загружаем реальные квесты
-        const questsResponse = await questApi.getQuests();
-        setQuests(questsResponse.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Ошибка загрузки квестов:', error);
-        // Fallback к мок данным
-        const mockQuests: Quest[] = [
-          {
-            id: 1,
-            title: "Тайны космоса",
-            description: "Увлекательное путешествие по галактике",
-            difficulty: "Легкий",
-            rating: 4.8,
-            plays: 1247,
-            reward: 50,
-            estimatedTime: 10
-          },
-          {
-            id: 2,
-            title: "Загадки истории",
-            description: "Раскройте секреты древних цивилизаций",
-            difficulty: "Средний",
-            rating: 4.6,
-            plays: 892,
-            reward: 75,
-            estimatedTime: 15
-          },
-          {
-            id: 3,
-            title: "Мир науки",
-            description: "Захватывающие научные открытия",
-            difficulty: "Сложный",
-            rating: 4.9,
-            plays: 543,
-            reward: 100,
-            estimatedTime: 20
-          }
-        ];
-        setQuests(mockQuests);
-        setLoading(false);
-      }
-    };
-
-    loadData();
+    // Используем статические данные для Mini App
+    console.log('HomePage: Загружаем статические данные...');
+    
+    // Имитируем загрузку с сервера
+    setTimeout(() => {
+      console.log('HomePage: Статические квесты загружены:', STATIC_QUESTS);
+      setQuests(STATIC_QUESTS);
+      setLoading(false);
+    }, 800);
   }, []);
 
   const handleQuestStart = (questId: number) => {

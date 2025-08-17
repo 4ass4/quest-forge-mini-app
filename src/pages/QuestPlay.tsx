@@ -12,6 +12,7 @@ import {
   Trophy
 } from 'lucide-react';
 import { useTelegram } from '../hooks/useTelegram';
+import { STATIC_QUESTS } from '../data/staticData';
 
 interface Quest {
   id: number;
@@ -63,41 +64,22 @@ const QuestPlay: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    // Мок данные для квеста
-    const mockQuest: Quest = {
-      id: parseInt(id || '1'),
-      title: 'Тайны космоса',
-      description: 'Увлекательное путешествие по галактике',
-      difficulty: 'Легкий',
-      estimatedTime: 10,
-      reward: 50,
-      steps: [
-        {
-          id: 1,
-          question: 'Какая планета является самой большой в нашей Солнечной системе?',
-          answer: 'юпитер',
-          hint: 'Эта планета названа в честь римского бога и имеет множество спутников',
-          image: '🪐'
-        },
-        {
-          id: 2,
-          question: 'Сколько планет в нашей Солнечной системе?',
-          answer: '8',
-          hint: 'Плутон больше не считается планетой с 2006 года'
-        },
-        {
-          id: 3,
-          question: 'Как называется ближайшая к нам звезда?',
-          answer: 'солнце',
-          hint: 'Мы видим её каждый день на небе'
-        }
-      ]
-    };
-
-    setTimeout(() => {
-      setQuest(mockQuest);
-      setLoading(false);
-    }, 800);
+    // Находим квест по ID из статических данных
+    const questId = parseInt(id || '1');
+    const selectedQuest = STATIC_QUESTS.find(q => q.id === questId);
+    
+    if (selectedQuest) {
+      setTimeout(() => {
+        setQuest(selectedQuest);
+        setLoading(false);
+      }, 800);
+    } else {
+      // Fallback на первый квест, если не найден
+      setTimeout(() => {
+        setQuest(STATIC_QUESTS[0]);
+        setLoading(false);
+      }, 800);
+    }
   }, [id]);
 
   const currentStep = quest?.steps[progress.currentStep];

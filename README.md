@@ -1,69 +1,99 @@
-# React + TypeScript + Vite
+# Quest Forge Mini App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🎮 **Quest Forge** - инновационная платформа для создания и прохождения квестов в Telegram Mini App формате.
 
-Currently, two official plugins are available:
+## 🚀 Особенности
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Telegram Mini App** - работает прямо в Telegram
+- **Система квестов** - создавайте и проходите увлекательные задания
+- **Достижения** - система наград и прогресса
+- **Магазин** - покупка бонусов и улучшений
+- **Рейтинг** - соревнование с другими игроками
+- **Мультиязычность** - русский и английский языки
 
-## Expanding the ESLint configuration
+## 🛡️ Лицензия и защита
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**⚠️ ВНИМАНИЕ: Этот проект защищен авторским правом!**
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Код является собственностью** Quest Forge Team
+- **Запрещено копирование** и коммерческое использование
+- **Только для изучения** и образовательных целей
+- **Подробности в файле** [LICENSE](LICENSE)
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+**🌐 English version:** [README-EN.md](README-EN.md) | [LICENSE-EN.md](LICENSE-EN.md) | [PROTECTION-EN.md](PROTECTION-EN.md)  
+**🌍 Все языки:** [LANGUAGES.md](LANGUAGES.md) | [LANGUAGES-EN.md](LANGUAGES-EN.md)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🔒 Безопасность
+
+- **API ключи** защищены переменными окружения
+- **База данных** Supabase с шифрованием
+- **Telegram Bot** привязан к авторскому аккаунту
+- **Пользовательские данные** защищены
+
+## 📱 Технологии
+
+- **Frontend:** React 19, TypeScript, Tailwind CSS
+- **Backend:** Node.js, Supabase (PostgreSQL)
+- **Telegram:** Mini App API, Bot API
+- **Deployment:** GitHub Pages, Vercel
+
+## 🚀 Быстрый старт
+
+### Установка зависимостей
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Запуск в режиме разработки
+```bash
+npm run dev
 ```
+
+### Сборка для продакшна
+```bash
+npm run build
+```
+
+### Развертывание
+```bash
+npm run deploy
+```
+
+## 📁 Структура проекта
+
+```
+quest-forge-mini-app/
+├── src/                    # Исходный код
+│   ├── components/         # React компоненты
+│   ├── pages/             # Страницы приложения
+│   ├── hooks/             # Пользовательские хуки
+│   ├── services/          # Сервисы и API
+│   └── data/              # Статические данные
+├── server/                 # Backend сервер
+│   ├── services/          # Supabase сервисы
+│   └── simple-bot.js      # Telegram бот
+├── public/                 # Публичные файлы
+└── docs/                   # Документация
+```
+
+## 🌐 Демо
+
+**Live Demo:** [Quest Forge Mini App](https://4ass4.github.io/quest-forge-mini-app/)
+
+## 📞 Контакты
+
+- **Email:** questforge.team@gmail.com
+- **Telegram:** @QuestForgeBot
+- **GitHub:** [Quest Forge Repository](https://github.com/4ass4/quest-forge-mini-app)
+
+## ⚠️ Правовая информация
+
+Этот проект является **проприетарным программным обеспечением** Quest Forge Team. 
+Любое несанкционированное использование, копирование или распространение 
+кода может повлечь за собой правовые последствия.
+
+**Copyright © 2024 Quest Forge Team. Все права защищены.**
+
+---
+
+**🎮 Создавайте увлекательные квесты с Quest Forge!**

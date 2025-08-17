@@ -4,8 +4,9 @@ require('dotenv').config();
 const BOT_TOKEN = process.env.BOT_TOKEN || '6441651041:AAF1m6AAIwjIXGuZkaaBUl8Uca9nf0lzbis';
 const WEBAPP_URL = process.env.WEBAPP_URL || 'https://4ass4.github.io/quest-forge-mini-app/';
 
-// Импортируем Supabase сервис
+// Импортируем сервисы
 const supabaseService = require('./services/supabaseService');
+const localizationService = require('./services/localizationService');
 
 // Создаем бота
 const bot = new TelegramBot(BOT_TOKEN, { polling: true });
@@ -18,49 +19,48 @@ console.log('🗄️ Supabase подключен');
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
   const telegramUser = msg.from;
-  const firstName = telegramUser.first_name || 'игрок';
+  const firstName = telegramUser.first_name || 'player';
   
   try {
     console.log(`🔄 Обработка /start от пользователя ${telegramUser.id} (@${telegramUser.username})`);
+    
+    // Определяем язык пользователя
+    const userLocale = localizationService.getUserLanguage(telegramUser);
+    console.log(`🌐 Язык пользователя: ${userLocale}`);
     
     // Регистрируем или получаем пользователя из Supabase
     const user = await supabaseService.createOrGetUser(telegramUser);
     
     console.log(`✅ Пользователь ${user.first_name} обработан. Баланс: ${user.balance} QUC`);
     
-    // Формируем приветственное сообщение
-    let welcomeMessage = `🎮 Добро пожаловать в Quest Forge, ${firstName}!`;
+    // Формируем приветственное сообщение с локализацией
+    let welcomeMessage = localizationService.getText('welcome', userLocale, { firstName });
     
     if (user.quests_completed > 0) {
-      welcomeMessage += `\n\n🏆 Ваш прогресс:\n`;
-      welcomeMessage += `📊 Уровень: ${user.level}\n`;
-      welcomeMessage += `💰 Баланс: ${user.balance} QUC\n`;
-      welcomeMessage += `✅ Квестов пройдено: ${user.quests_completed}\n`;
-      welcomeMessage += `⭐ Общий счет: ${user.total_score}`;
+      welcomeMessage += '\n\n' + localizationService.getText('progress', userLocale);
+      welcomeMessage += '\n' + localizationService.getText('level', userLocale, { level: user.level });
+      welcomeMessage += '\n' + localizationService.getText('balance', userLocale, { balance: user.balance });
+      welcomeMessage += '\n' + localizationService.getText('questsCompleted', userLocale, { count: user.quests_completed });
+      welcomeMessage += '\n' + localizationService.getText('totalScore', userLocale, { score: user.total_score });
     } else {
-      welcomeMessage += `\n\n🎁 Добро пожаловать! Вы получили стартовый бонус 100 QUC!`;
+      welcomeMessage += '\n\n' + localizationService.getText('newUserBonus', userLocale);
     }
     
-    welcomeMessage += `\n\n🚀 Увлекательные квесты ждут вас!`;
+    welcomeMessage += '\n\n' + localizationService.getText('excitingQuests', userLocale);
+    
+    // Получаем локализованные кнопки
+    const buttons = localizationService.getButtons([
+      ['play'],
+      ['profile', 'leaderboard'],
+      ['help', 'shop']
+    ], userLocale);
+    
+    // Добавляем web_app для кнопки "Играть"
+    buttons[0][0].web_app = { url: WEBAPP_URL };
     
     await bot.sendMessage(chatId, welcomeMessage, {
       reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: '🎮 Играть',
-              web_app: { url: WEBAPP_URL }
-            }
-          ],
-          [
-            { text: '👤 Профиль', callback_data: 'profile' },
-            { text: '🏆 Рейтинг', callback_data: 'leaderboard' }
-          ],
-          [
-            { text: '❓ Помощь', callback_data: 'help' },
-            { text: '💰 Магазин', callback_data: 'shop' }
-          ]
-        ]
+        inline_keyboard: buttons
       }
     });
     
@@ -68,9 +68,8 @@ bot.onText(/\/start/, async (msg) => {
     console.error('❌ Ошибка обработки /start:', error);
     
     // Отправляем сообщение об ошибке пользователю
-    await bot.sendMessage(chatId, 
-      `😔 Произошла ошибка при регистрации. Попробуйте позже или обратитесь к администратору.`
-    );
+    const userLocale = localizationService.getUserLanguage(telegramUser);
+    await bot.sendMessage(chatId, localizationService.getText('error', userLocale));
   }
 });
 

@@ -78,6 +78,22 @@ export const useTelegram = () => {
           };
           setUser(mockUser);
         }
+        
+        // Применяем тему Telegram
+        if (tg.themeParams) {
+          document.documentElement.style.setProperty('--tg-theme-bg-color', tg.themeParams.bg_color || '#17212b');
+          document.documentElement.style.setProperty('--tg-theme-text-color', tg.themeParams.text_color || '#ffffff');
+          document.documentElement.style.setProperty('--tg-theme-hint-color', tg.themeParams.hint_color || '#8596a3');
+          document.documentElement.style.setProperty('--tg-theme-link-color', tg.themeParams.link_color || '#62a6ff');
+          document.documentElement.style.setProperty('--tg-theme-button-color', tg.themeParams.button_color || '#62a6ff');
+          document.documentElement.style.setProperty('--tg-theme-button-text-color', tg.themeParams.button_text_color || '#ffffff');
+        }
+        
+        // Устанавливаем основной цвет
+        if (tg.themeParams?.bg_color) {
+          document.documentElement.style.setProperty('--tg-theme-bg-color', tg.themeParams.bg_color);
+        }
+        
       } else {
         console.log('⚠️ Telegram WebApp недоступен, используется мок пользователь');
         const mockUser: TelegramUser = {

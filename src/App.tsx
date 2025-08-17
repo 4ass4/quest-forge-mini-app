@@ -29,6 +29,15 @@ function AppContent() {
     if (tg?.themeParams) {
       document.documentElement.style.setProperty('--tg-theme-bg-color', tg.themeParams.bg_color || '#17212b');
       document.documentElement.style.setProperty('--tg-theme-text-color', tg.themeParams.text_color || '#ffffff');
+      document.documentElement.style.setProperty('--tg-theme-hint-color', tg.themeParams.hint_color || '#8596a3');
+      document.documentElement.style.setProperty('--tg-theme-link-color', tg.themeParams.link_color || '#62a6ff');
+      document.documentElement.style.setProperty('--tg-theme-button-color', tg.themeParams.button_color || '#3b82f6');
+      document.documentElement.style.setProperty('--tg-theme-button-text-color', tg.themeParams.button_text_color || '#ffffff');
+    }
+    
+    // Применяем тему к body
+    if (tg?.colorScheme) {
+      document.body.setAttribute('data-theme', tg.colorScheme);
     }
   }, [tg]);
 
